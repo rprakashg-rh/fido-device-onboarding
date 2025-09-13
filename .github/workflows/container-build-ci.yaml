@@ -1,12 +1,12 @@
 ---
 name: CI for building and publishing fdo server container image
 on:
-    workflow_dispatch:
-    push:
-        paths:
-        - 'images/**'
-        branches:
-        - main
+  workflow_dispatch:
+  push:
+      paths:
+      - 'images/**'
+      branches:
+      - main
 jobs:
     build:
         name: Container build

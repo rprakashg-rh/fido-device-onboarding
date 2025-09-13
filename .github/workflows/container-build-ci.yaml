@@ -1,0 +1,100 @@
+---
+name: CI for building and publishing fdo server container image
+on:
+    workflow_dispatch:
+        push:
+            paths:
+            - 'images/**'
+            branches:
+            - main
+jobs:
+    build:
+        name: Container build
+        runs-on: ubuntu-latest
+        env:
+            IMAGE_NAME: fdo-server
+            IMAGE_TAG: ${{ github.sha }}
+            REGISTRY: quay.io/${{ vars.REGISTRY_USER }}
+        container:
+            image: registry.access.redhat.com/ubi9/ubi
+            options: --privileged
+        steps:
+        - name: Clone the repository
+          uses: actions/checkout@v4
+        
+        - name: Get container tools in UBI builder
+          run: dnf -y install podman buildah skopeo
+        
+        - name: Access a subscription via activation key
+          env:
+            SMDEV_CONTAINER_OFF: 1
+            orgid: ${{ secrets.ORGID }}
+            activation_key: ${{ secrets.ACTIVATION_KEY }}
+          run: subscription-manager register --org=$orgid --activationkey=$activation_key
+        
+        - name: Workaround open podman-login action issue
+          env:
+            auth: "{ \"auths\": {} }"
+          run: |
+            mkdir -p $HOME/.docker
+            echo $auth > $HOME/.docker/config.json
+
+        - name: login to registry.redhat.io
+          uses: redhat-actions/podman-login@v1
+          with:
+            registry: registry.redhat.io
+            username: ${{ secrets.REGISTRY_USER }}
+            password: ${{ secrets.REGISTRY_USER_PASSWORD }}
+            auth_file_path: /run/containers/0/auth.json
+        
+        - name: Login to quay.io
+          uses: redhat-actions/podman-login@v1
+          with:
+            registry: quay.io
+            username: ${{ secrets.REGISTRY_USER }}
+            password: ${{ secrets.REGISTRY_USER_PASSWORD }}
+            auth_file_path: /run/containers/0/auth.json
+
+        - name: Buildah build
+          id: build-image
+          uses: redhat-actions/buildah-build@v2
+          with:
+            image: ${{ env.IMAGE_NAME }}
+            tags: latest ${{ env.IMAGE_TAG }}    
+            context: ./images/fdo-server/
+            containerfiles: |
+                ./images/fdo-server/Containerfile
+            extra-args: --secret id=creds,src=/run/containers/0/auth.json
+        
+        - name: Push to Container Repository
+          id: push-to-registry
+          uses: redhat-actions/push-to-registry@v2
+          with:
+            image: ${{ steps.build-image.outputs.image }}
+            tags: ${{ steps.build-image.outputs.tags }}
+            registry: ${{ env.REGISTRY }}
+
+        - name: Overlay image with cloud-init
+          id: build-cloudinit-overlay
+          uses: redhat-actions/buildah-build@v2
+          with:
+            image: ${{ env.IMAGE_NAME }}
+            tags: aws    
+            context: ./images/cloud-init/
+            containerfiles: |
+                ./images/cloud-init/Containerfile
+            build-args: |
+                FROM=${{ env.REGISTRY }}/${{ steps.build-image.outputs.image }}
+
+        - name: Push the cloud-init overlay image to registry
+          uses: redhat-actions/push-to-registry@v2
+          with:
+            image: ${{ steps.build-cloudinit-overlay.outputs.image }}
+            tags: ${{ steps.build-cloudinit-overlay.outputs.tags }}
+            registry: ${{ env.REGISTRY }}
+
+        - name: Clean up the subscription
+          env:
+            SMDEV_CONTAINER_OFF: 1
+          run: subscription-manager unregister            
+        

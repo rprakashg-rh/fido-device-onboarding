@@ -1,0 +1,35 @@
+# This Containerfile expects a secret named "creds" to contain
+# the registry pull secret.  To build, use e.g. 
+# podman build --secret id=creds,src=$HOME/.config/containers/auth.json ...
+FROM golang:1.25 AS builder 
+
+RUN go install github.com/fido-device-onboard/go-fdo-server@804ce46e1498cdeaa9448cf648d432529e1072e4
+
+FROM registry.redhat.io/rhel9/rhel-bootc:latest
+
+USER root
+
+COPY containers-auth.conf /usr/lib/tmpfiles.d/link-podman-credentials.conf
+RUN --mount=type=secret,id=creds,required=true cp /run/secrets/creds /usr/lib/container-auth.json && \
+    chmod 0600 /usr/lib/container-auth.json && \
+    ln -sr /usr/lib/container-auth.json /etc/ostree/auth.json
+
+# Install base packages
+RUN dnf \
+    --enablerepo=rhel-9-for-x86_64-baseos-rpms \
+    --enablerepo=rhel-9-for-x86_64-appstream-rpms \
+    install -y \
+    podman \
+    tmux \
+    mkpasswd \
+    git \
+    ansible-core \
+    && dnf clean all \
+    && rm -rf /var/{cache,log} /var/lib/{dnf,rhsm}
+
+RUN mkdir -p /go/bin \
+    export PATH=/go/bin:$PATH
+
+RUN echo $PATH
+
+COPY --from=builder /go/bin/go-fdo-server /go/bin

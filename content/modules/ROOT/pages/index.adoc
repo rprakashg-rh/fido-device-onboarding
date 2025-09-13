@@ -4,19 +4,24 @@
 :imagesdir: ../assets/images
 
 == Lab Introduction
+
 In this lab you will learn how to deploy FIDO device onboarding server infrastructure and learn how to leverage FDO for secure device onboarding of edge devices.
 
 == Background
 
+Add background about this lab
+
 == Lab Environment
+
+Describe the lab environment here
 
 == Workshop Agenda
 
+Include a full workshop agenda here 
+
 == Access & Credentials
 
-You're already logged into the environment as `{lab_username}`. No manual setup is needed.
-
-All lab content is preconfigured and ready to run.
+You're already logged into the environment as `{lab_username}`. No manual setup is needed. All lab content is preconfigured and ready to run.
 
 === Systems Overview
 

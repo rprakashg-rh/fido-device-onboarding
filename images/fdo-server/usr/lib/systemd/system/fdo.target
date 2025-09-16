@@ -1,0 +1,19 @@
+[Unit]
+Description=FDO Device Onboarding Services Group
+
+# Wants= directives starts these services with this unit (soft dependency).
+# After= directives delays this unit until these services start.
+#
+# Note: The exact startup order among the services is controlled by
+# additional directives defined within the .container files
+Wants=fdonet-network.service
+Wants=fdo-manufacturing-init.service
+Wants=fdo-manufacturing.service
+
+After=network.target
+After=fdonet-network.service
+After=fdo-manufacturing-init.service
+After=fdo-manufacturing.service
+
+[Install]
+WantedBy=multi-user.target

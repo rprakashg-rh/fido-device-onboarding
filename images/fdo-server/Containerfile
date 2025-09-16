@@ -14,6 +14,9 @@ RUN --mount=type=secret,id=creds,required=true cp /run/secrets/creds /usr/lib/co
     chmod 0600 /usr/lib/container-auth.json && \
     ln -sr /usr/lib/container-auth.json /etc/ostree/auth.json
 
+ADD usr usr
+ADD etc etc
+
 # Install base packages
 RUN dnf \
     --enablerepo=rhel-9-for-x86_64-baseos-rpms \
@@ -27,9 +30,18 @@ RUN dnf \
     && dnf clean all \
     && rm -rf /var/{cache,log} /var/lib/{dnf,rhsm}
 
+# Make required directories for FDO    
+RUN mkdir -p /etc/fdo \
+    && mkdir /etc/fdo/keys \
+    && mkdir /etc/fdo/fdo-manufacturing \
+    && mkdir /etc/fdo/fdo-rendezvous \
+    && mkdir /etc/fdo/fdo-owner
+
 RUN mkdir -p /go/bin \
     export PATH=/go/bin:$PATH
 
 RUN echo $PATH
 
 COPY --from=builder /go/bin/go-fdo-server /go/bin
+
+CMD [ "/sbin/init" ]

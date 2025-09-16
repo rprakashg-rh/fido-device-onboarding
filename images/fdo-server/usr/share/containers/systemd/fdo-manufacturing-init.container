@@ -1,0 +1,19 @@
+[Unit]
+Description=FDO Manufacturing Server Initialization
+PartOf=fdo.target
+
+[Container]
+Image=registry.access.redhat.com/ubi9/ubi-minimal
+ContainerName=fdo-manufacturing-init
+Network=fdonet.network
+Exec=/bin/sh init-fdo-manufacturing.sh
+Volume=/etc/fdo:/etc/fdo:Z
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=fdo.target

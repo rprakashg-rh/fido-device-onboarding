@@ -12,12 +12,12 @@ jobs:
     name: Container build
     runs-on: ubuntu-latest
     env:
-        IMAGE_NAME: fdo-server
-        IMAGE_TAG: ${{ github.sha }}
-        REGISTRY: quay.io/${{ vars.REGISTRY_USER }}
+      IMAGE_NAME: fdo-server
+      IMAGE_TAG: ${{ github.sha }}
+      REGISTRY: quay.io/${{ vars.REGISTRY_USER }}
     container:
-        image: registry.access.redhat.com/ubi9/ubi
-        options: --privileged
+      image: registry.access.redhat.com/ubi9/ubi
+      options: --privileged
     steps:
     - name: Clone the repository
       uses: actions/checkout@v4

@@ -1,5 +1,5 @@
 ---
-name: Deploy RHEM on ImageMode
+name: Deploy FDO on ImageMode
 on:
     workflow_dispatch:
 jobs:

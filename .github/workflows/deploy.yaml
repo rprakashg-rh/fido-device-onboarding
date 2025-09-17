@@ -1,0 +1,42 @@
+---
+name: Deploy RHEM on ImageMode
+on:
+    workflow_dispatch:
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        container:
+            image: registry.access.redhat.com/ubi9/ubi
+            options: --privileged
+        steps:
+        - name: Clone source
+          uses: actions/checkout@v4
+        
+        - name: Access a subscription via activation key
+          env:
+            SMDEV_CONTAINER_OFF: 1
+            orgid: ${{ secrets.ORGID }}
+            activation_key: ${{ secrets.ACTIVATION_KEY }}
+          run: subscription-manager register --org=$orgid --activationkey=$activation_key
+
+        - name: Setup ansible
+          run: |
+            dnf install -y ansible-core
+        
+        - name: Install required ansible collections
+          run: |
+            ansible-galaxy collection install amazon.aws
+            
+        - name: Run ansible playbook
+          env:
+            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+            VAULT_SECRET: ${{ secrets.VAULT_SECRET }}  
+          run: |
+            ansible-playbook --vault-password-file <(echo "$VAULT_SECRET") ./ansible/deploy-infra.yaml 
+        
+        - name: Clean up the subscription
+          env:
+            SMDEV_CONTAINER_OFF: 1
+          run: subscription-manager unregister

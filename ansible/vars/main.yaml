@@ -1,0 +1,21 @@
+ami_name: fdo-server-x86_64
+ami_bucket_name: bootc-amis 
+aws_region: us-west-2
+registry: quay.io
+user: rgopinat
+
+# certificate related data
+base_domain: fdo.sandbox390.opentlc.com
+manufacturing: "manufacturing.{{ base_domain }}"
+rendezvous: "rendezvous.{{ base_domain }}"
+owner: "owner.{{ base_domain }}"
+email: ram.gopinathan@redhat.com
+
+# Instance related data
+ami: ami-0e7f7cfd4270426d5
+instance_name: fdo-server
+instance_type: t2.2xlarge
+key_name: ec2
+subnet_id: subnet-0e844dcb8323edd2c
+security_group_id: sg-0fa0b407346360849
+storage: 50

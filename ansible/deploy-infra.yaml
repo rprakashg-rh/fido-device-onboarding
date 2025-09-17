@@ -1,2 +1,63 @@
 ---
 - name: Ansible playbook to deploy FDO infrastructure
+  hosts: localhost
+  gather_facts: yes
+  vars_files:
+  - vars/main.yaml
+  tasks:
+  - name: Create a temp directory to store generated keys and certs
+    ansible.builtin.tempfile:
+      state: directory
+      suffix: fdokeys
+    register: tempdir_result
+
+  - name: Set in fact
+    ansible.builtin.set_fact:
+      fdoKeysdir: "{{ tempdir_result.path }}"
+
+  - name: Generate manufacturer private key and certificate
+    ansible.builtin.shell: |
+      openssl ecparam -genkey -name prime256v1 -out "{{ fdoKeysdir }}/manufacturer_key.der" -outform DER
+      openssl req -new -x509 -key "{{ fdoKeysdir }}/manufacturer_key.der" -inform DER -out "{{ fdoKeysdir }}/manufacturer_cert.pem" -days 365 \
+        -subj "/CN=FDO Manufacturer/O=Test Organization/C=US"  
+  - name: Generate Owner private key and cert
+    ansible.builtin.shell: |
+      openssl ecparam -genkey -name prime256v1 -out "{{ fdoKeysdir }}/owner_key.der" -outform DER
+      openssl req -new -x509 -key /tmp/fdo/keys/owner_key.der -keyform der -out "{{ fdoKeysdir }}/owner_cert.pem" -days 365 \
+        -subj "/CN=FDO Owner/O=Test Organization/C=US"
+
+  - name: Generate device CA private key and certificate
+    ansible.builtin.shell: |
+      openssl ecparam -genkey -name prime256v1 -out "{{ fdoKeysdir }}/device_ca_key.der" -outform DER
+      openssl req -new -x509 -key /tmp/fdo/keys/device_ca_key.der -inform DER -out "{{ fdoKeysdir }}/device_ca_cert.pem" -days 365 \
+        -subj "/CN=FDO Device CA/O=Test Organization/C=US"
+
+  - name: load secrets 
+    ansible.builtin.include_vars:
+      file: "./vars/secrets.yml"
+      
+  - name: Launch ec2 instance
+    amazon.aws.ec2_instance:
+      name: "{{ instance_name }}"
+      instance_type: "{{ instance_type }}"
+      key_name: "{{ key_name }}"
+      image_id: "{{ ami }}"
+      subnet_id: "{{ subnet_id }}"
+      security_group: "{{ security_group_id }}"
+      volumes:
+      - device_name: /dev/sda1
+        ebs:
+          volume_size: "{{ storage }}"
+          volume_type: gp3
+      network_interfaces:
+      - assign_public_ip: true
+      wait: true
+      count: 1
+      user_data: "{{ lookup('ansible.builtin.template', './templates/user-data.yaml.j2') }}"
+      tags:
+        Name: "{{ instance_name }}"
+    register: ec2_instance
+
+  - name: Print public dns
+    ansible.builtin.debug:
+      var: ec2_instance.instances[0].public_dns_name

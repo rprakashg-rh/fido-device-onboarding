@@ -23,13 +23,13 @@
   - name: Generate Owner private key and cert
     ansible.builtin.shell: |
       openssl ecparam -genkey -name prime256v1 -out "{{ fdoKeysdir }}/owner_key.der" -outform DER
-      openssl req -new -x509 -key /tmp/fdo/keys/owner_key.der -keyform der -out "{{ fdoKeysdir }}/owner_cert.pem" -days 365 \
+      openssl req -new -x509 -key "{{ fdoKeysdir }}/owner_key.der" -keyform der -out "{{ fdoKeysdir }}/owner_cert.pem" -days 365 \
         -subj "/CN=FDO Owner/O=Test Organization/C=US"
 
   - name: Generate device CA private key and certificate
     ansible.builtin.shell: |
       openssl ecparam -genkey -name prime256v1 -out "{{ fdoKeysdir }}/device_ca_key.der" -outform DER
-      openssl req -new -x509 -key /tmp/fdo/keys/device_ca_key.der -inform DER -out "{{ fdoKeysdir }}/device_ca_cert.pem" -days 365 \
+      openssl req -new -x509 -key "{{ fdoKeysdir }}/device_ca_key.der -inform DER -out "{{ fdoKeysdir }}/device_ca_cert.pem" -days 365 \
         -subj "/CN=FDO Device CA/O=Test Organization/C=US"
 
   - name: load secrets 

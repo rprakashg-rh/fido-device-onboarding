@@ -29,7 +29,7 @@
   - name: Generate device CA private key and certificate
     ansible.builtin.shell: |
       openssl ecparam -genkey -name prime256v1 -out "{{ fdoKeysdir }}/device_ca_key.der" -outform DER
-      openssl req -new -x509 -key "{{ fdoKeysdir }}/device_ca_key.der -inform DER -out "{{ fdoKeysdir }}/device_ca_cert.pem" -days 365 \
+      openssl req -new -x509 -key "{{ fdoKeysdir }}/device_ca_key.der" -inform DER -out "{{ fdoKeysdir }}/device_ca_cert.pem" -days 365 \
         -subj "/CN=FDO Device CA/O=Test Organization/C=US"
 
   - name: load secrets 

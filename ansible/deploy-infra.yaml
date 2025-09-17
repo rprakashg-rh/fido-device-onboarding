@@ -32,14 +32,14 @@
       openssl req -new -x509 -key "{{ fdoKeysdir }}/device_ca_key.der" -inform DER -out "{{ fdoKeysdir }}/device_ca_cert.pem" -days 365 \
         -subj "/CN=FDO Device CA/O=Test Organization/C=US"
 
-  - name: Debug cloud-init config
-    ansible.builtin.debug:
-      msg: "{{ lookup('ansible.builtin.template', './templates/user-data.yaml.j2') }}"
-      
   - name: load secrets 
     ansible.builtin.include_vars:
       file: "./vars/secrets.yml"
-      
+
+  - name: Debug cloud-init config
+    ansible.builtin.debug:
+      msg: "{{ lookup('ansible.builtin.template', './templates/user-data.yaml.j2') }}"
+
   - name: Launch ec2 instance
     amazon.aws.ec2_instance:
       name: "{{ instance_name }}"

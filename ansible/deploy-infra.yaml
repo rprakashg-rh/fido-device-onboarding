@@ -36,10 +36,6 @@
     ansible.builtin.include_vars:
       file: "./vars/secrets.yml"
 
-  - name: Debug cloud-init config
-    ansible.builtin.debug:
-      msg: "{{ lookup('ansible.builtin.template', './templates/user-data.yaml.j2') }}"
-
   - name: Launch ec2 instance
     amazon.aws.ec2_instance:
       name: "{{ instance_name }}"
@@ -57,7 +53,7 @@
       - assign_public_ip: true
       wait: true
       count: 1
-      #user_data: "{{ lookup('ansible.builtin.template', './templates/user-data.yaml.j2') }}"
+      user_data: "{{ lookup('ansible.builtin.template', './templates/user-data.yaml.j2') }}"
       tags:
         Name: "{{ instance_name }}"
     register: ec2_instance

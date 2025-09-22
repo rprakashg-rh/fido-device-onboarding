@@ -12,5 +12,23 @@ sudo podman pull $REGISTRY/$REGISTRY_USER$/fdo-server:aws
 Use BiB to build AMI image
 
 ```sh
+sudo podman pull $REGISTRY/$REGISTRY_USER/fdo-server:aws
 
+sudo podman run \
+--authfile=$PULL_SECRET \
+--rm \
+--privileged \
+--security-opt label=type:unconfined_t \
+--env AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} \
+--env AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} \
+--env AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION} \
+--env AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID} \
+-v /var/lib/containers/storage:/var/lib/containers/storage \
+registry.redhat.io/rhel9/bootc-image-builder:latest \
+--local \
+--type ami \
+--aws-ami-name fdo-server-x86_64 \
+--aws-bucket bootc-amis \
+--aws-region us-west-2 \
+$REGISTRY/$REGISTRY_USER/fdo-server:aws
 ```

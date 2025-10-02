@@ -11,34 +11,33 @@ runcmd:
 - echo "Welcome to FDO on RHEL Image Mode!" > /etc/motd
 
 write_files:
-- path: /etc/fdo/keys/manufacturer_key.der
+- path: /etc/fdo/keys/manufacturer_key.pem
   permissions: '0755'
   owner: 'root:root'
   content: |
-{{ lookup('file', '{{ fdoKeysdir }}/manufacturer_key.der') | indent(4, true) }}
+{{ lookup('file', '{{ fdoKeysdir }}/manufacturer_key.pem') | indent(4, true) }}
 - path: /etc/fdo/keys/manufacturer_cert.pem
   permissions: '0755'
   owner: 'root:root'
   content: |
 {{ lookup('file', '{{ fdoKeysdir }}/manufacturer_cert.pem') | indent(4, true) }}
-- path: /etc/fdo/keys/owner_key.der
+- path: /etc/fdo/keys/owner_key.pem
   permissions: '0755'
   owner: 'root:root'
   content: |
-{{ lookup('file', '{{ fdoKeysdir }}/owner_key.der') | indent(4, true) }}
+{{ lookup('file', '{{ fdoKeysdir }}/owner_key.pem') | indent(4, true) }}
 - path: /etc/fdo/keys/owner_cert.pem
   permissions: '0755'
   owner: 'root:root'
   content: |
 {{ lookup('file', '{{ fdoKeysdir }}/owner_cert.pem') | indent(4, true) }}
-- path: /etc/fdo/keys/device_ca_key.der
+- path: /etc/fdo/keys/device_ca_key.pem
   permissions: '0755'
   owner: 'root:root'
   content: |
-{{ lookup('file', '{{ fdoKeysdir }}/device_ca_key.der') | indent(4, true) }}
+{{ lookup('file', '{{ fdoKeysdir }}/device_ca_key.pem') | indent(4, true) }}
 - path: /etc/fdo/keys/device_ca_cert.pem
   permissions: '0755'
   owner: 'root:root'
   content: |
 {{ lookup('file', '{{ fdoKeysdir }}/device_ca_cert.pem') | indent(4, true) }}
-

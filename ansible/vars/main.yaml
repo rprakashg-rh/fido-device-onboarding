@@ -5,7 +5,7 @@ registry: quay.io
 user: rgopinat
 
 # certificate related data
-base_domain: fdo.sandbox390.opentlc.com
+base_domain: fdo.sandbox1297.opentlc.com
 manufacturing: "manufacturing.{{ base_domain }}"
 rendezvous: "rendezvous.{{ base_domain }}"
 owner: "owner.{{ base_domain }}"

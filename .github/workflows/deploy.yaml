@@ -22,11 +22,15 @@ jobs:
     - name: Setup ansible
       run: |
         dnf install -y ansible-core
-    
+
     - name: Install required ansible collections
       run: |
         ansible-galaxy collection install amazon.aws
-        
+    
+    - name: Install collection dependencies
+      run: |
+        pip install -r ~/.ansible/collections/ansible_collections/amazon/aws/requirements.txt
+
     - name: Run ansible playbook
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}

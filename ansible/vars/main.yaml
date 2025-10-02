@@ -12,10 +12,10 @@ owner: "owner.{{ base_domain }}"
 email: ram.gopinathan@redhat.com
 
 # Instance related data
-ami: ami-07292f87d33f696e1
+ami: ami-084244df9265435b3
 instance_name: fdo-server
 instance_type: t2.2xlarge
 key_name: ec2
-subnet_id: subnet-08f6f6b604ea8ba54
-security_group_id: sg-090351665ba076fde
+subnet_id: subnet-0b07b6a81b12d29f9
+security_group_id: sg-0fbc003f8520f4e64
 storage: 50

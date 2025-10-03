@@ -5,6 +5,17 @@
   vars_files:
   - vars/main.yaml
   tasks:
+  - name: Install packages
+    ansible.builtin.dnf:
+      state: latest
+      name: "{{ packages }}"
+    vars:
+      packages:
+      - python3
+      - python3-pip
+      - boto3
+      - botocore
+      
   - name: Create a temp directory to store generated keys and certs
     ansible.builtin.tempfile:
       state: directory

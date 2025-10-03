@@ -35,8 +35,10 @@ RUN dnf \
     --enablerepo=rhel-9-for-x86_64-baseos-rpms \
     --enablerepo=rhel-9-for-x86_64-appstream-rpms \
     install -y \
-    sqllite
-     
+    sqlite \
+    && dnf clean all \
+    && rm -rf /var/{cache,log} /var/lib/{dnf,rhsm}
+
 # Make required directories for FDO    
 RUN mkdir -p /etc/fdo \
     && mkdir /etc/fdo/keys \

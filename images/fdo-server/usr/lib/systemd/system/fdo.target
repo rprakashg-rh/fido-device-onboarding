@@ -6,12 +6,10 @@ Description=FDO Device Onboarding Services Group
 #
 # Note: The exact startup order among the services is controlled by
 # additional directives defined within the .container files
-Wants=fdonet-network.service
 Wants=fdo-manufacturing-init.service
 Wants=fdo-manufacturing.service
 
 After=network.target
-After=fdonet-network.service
 After=fdo-manufacturing-init.service
 After=fdo-manufacturing.service
 

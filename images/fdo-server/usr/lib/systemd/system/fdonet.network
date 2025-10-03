@@ -1,4 +1,0 @@
-[Network]
-NetworkName=fdonet
-Driver=bridge
-IPAMDriver=host-local

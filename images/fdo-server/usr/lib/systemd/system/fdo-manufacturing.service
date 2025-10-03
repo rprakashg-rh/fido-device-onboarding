@@ -5,7 +5,7 @@ After=fdo-manufacturing-init.service
 Wants=fdo-manufacturing-init.service
 
 [Service]
-ExecStart=/go/bin/go-fdo-server manufacturing $HOST_IP:$PORT --manufacturing-key=$MANUFACTURING_KEY --owner-cert=$OWNER_CERT --device-ca-key=$DEVICE_CA_KEY --device-ca-cert=$DEVICE_CA_CERT --db=$DB --db-pass=$DB_PASS --debug
+ExecStart=/go/bin/go-fdo-server manufacturing $MANUFACTURING_HOST_IP:$MANUFACTURING_PORT --manufacturing-key=$MANUFACTURING_KEY --owner-cert=$OWNER_CERT --device-ca-key=$DEVICE_CA_KEY --device-ca-cert=$DEVICE_CA_CERT --db=$MANUFACTURING_DB --db-pass=$MANUFACTURING_DB_PASS --debug
 Restart=always
 BindPaths=/etc/fdo:/etc/fdo:Z
 EnvironmentFile=/etc/fdo/fdo-manufacturing/env

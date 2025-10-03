@@ -6,7 +6,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     container:
-      image: registry.access.redhat.com/ubi9/ubi
+      image: registry.access.redhat.com/ubi9/python-312
       options: --privileged
     steps:
     - name: Clone source

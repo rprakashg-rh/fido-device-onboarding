@@ -30,18 +30,18 @@ ENV_OUTPUT="/etc/fdo/fdo-manufacturing/env"
 ENV_TEMPLATE="/usr/bin/fdo-manufacturing-env.template"
 
 # Get value for HOST_IP from config file
-HOST_IP=$(get_keyvalue "host_ip" "$CONFIG_FILE")
-# verify HOST_IP is specified in config
-if [ -z "$HOST_IP" ]; then
-    echo "Error: host_ip is missing in config file"
+MANUFACTURING_HOST_IP=$(ip route get 1.1.1.1 | awk '{print $7; exit}')
+# verify MANUFACTURING_HOST_IP is specified in config
+if [ -z "$MANUFACTURING_HOST_IP" ]; then
+    echo "Error: Could not automatically get manufacturing_host_ip "
     exit 1
 fi
 
 # Get value for port from config file
-PORT=$(get_keyvalue "port" "$CONFIG_FILE")
-#verify PORT is specified in config
-if [ -z "$PORT" ]; then
-    echo "Error: port is missing in config file"
+MANUFACTURING_PORT=$(get_keyvalue "manufacturing_port" "$CONFIG_FILE")
+#verify MANUFACTURING_PORT is specified in config
+if [ -z "$MANUFACTURING_PORT" ]; then
+    echo "Error: manufacturing_port is missing in config file"
     exit 1
 fi
 
@@ -71,20 +71,20 @@ if [ -z "$DEVICE_CA_KEY" || -z "$DEVICE_CA_CERT" ]; then
 fi
 
 #Get DB
-DB=$(get_keyvalue "db" "$CONFIG_FILE")
-#verify db name is set
-if [ -z "$DB" ]; then
-    echo "Error: DB file path is not set in config file"
+MANUFACTURING_DB=$(get_keyvalue "manufacturing_db" "$CONFIG_FILE")
+#verify manufacturing_db name is set
+if [ -z "$MANUFACTURING_DB" ]; then
+    echo "Error: MANUFACTURING_DB file path is not set in config file"
     exit 1
 fi
 
 #create the env file using template
-sed "s|{{HOST_IP}}|${HOST_IP}|g" "$ENV_TEMPLATE" > "$ENV_OUTPUT"
-sed "s|{{PORT}}|${PORT}|g" "$ENV_TEMPLATE" > "$ENV_OUTPUT"
+sed "s|{{MANUFACTURING_HOST_IP}}|${MANUFACTURING_HOST_IP}|g" "$ENV_TEMPLATE" > "$ENV_OUTPUT"
+sed "s|{{MANUFACTURING_PORT}}|${MANUFACTURING_PORT}|g" "$ENV_TEMPLATE" > "$ENV_OUTPUT"
 sed "s|{{MANUFACTURING_KEY}}|${MANUFACTURING_KEY}|g" "$ENV_TEMPLATE" > "$ENV_OUTPUT"
 sed "s|{{OWNER_CA_CERT}}|${OWNER_CA_CERT}|g" "$ENV_TEMPLATE" > "$ENV_OUTPUT"
 sed "s|{{DEVICE_CA_KEY}}|${DEVICE_CA_KEY}|g" "$ENV_TEMPLATE" > "$ENV_OUTPUT"
 sed "s|{{DEVICE_CA_CERT}}|${DEVICE_CA_CERT}|g" "$ENV_TEMPLATE" > "$ENV_OUTPUT"
-sed "s|{{DB}}|${DB}|g" "$ENV_TEMPLATE" > "$ENV_OUTPUT"
+sed "s|{{MANUFACTURING_DB}}|${MANUFACTURING_DB}|g" "$ENV_TEMPLATE" > "$ENV_OUTPUT"
 
 echo "Initialization of FDO Manufacturing server is complete"

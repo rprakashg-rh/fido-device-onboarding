@@ -14,8 +14,9 @@ security_group_id: sg-0fbc003f8520f4e64
 storage: 50
 
 # fdo manufacturing config
+manufacturing_port: 8038
 manufacturing_key: /etc/fdo/keys/anufacturer_key.pem
 owner_ca_cert: /etc/fdo/keys/owner_cert.pem
 device_ca_key: /etc/fdo/keys/device_ca_key.pem
 device_ca_cert: /etc/fdo/keys/device_ca_cert.pem
-db: /etc/fdo/fdo-manufacturing/mfg.db
+manufacturing_db: /etc/fdo/fdo-manufacturing/mfg.db

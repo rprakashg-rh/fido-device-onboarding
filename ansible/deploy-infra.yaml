@@ -38,6 +38,7 @@
       openssl ecparam -genkey -name prime256v1 -out "{{ fdoKeysdir }}/manufacturer_key.pem" -outform PEM
       openssl req -new -x509 -key "{{ fdoKeysdir }}/manufacturer_key.pem" -inform PEM -out "{{ fdoKeysdir }}/manufacturer_cert.pem" -days 365 \
         -subj "/CN=FDO Manufacturer/O=Test Organization/C=US"  
+  
   - name: Generate Owner private key and cert
     ansible.builtin.shell: |
       openssl ecparam -genkey -name prime256v1 -out "{{ fdoKeysdir }}/owner_key.pem" -outform PEM
@@ -50,6 +51,11 @@
       openssl req -new -x509 -key "{{ fdoKeysdir }}/device_ca_key.pem" -inform PEM -out "{{ fdoKeysdir }}/device_ca_cert.pem" -days 365 \
         -subj "/CN=FDO Device CA/O=Test Organization/C=US"
 
+  - name: Generate fdo manufacturing server config
+    ansible.builtin.template:
+      src: './templates/fdo-manufacturing-config.yaml.j2'
+      dest: "{{ fdoKeysdir }}/fdo-manufacturing-config.yaml"
+      
   - name: load secrets 
     ansible.builtin.include_vars:
       file: "./vars/secrets.yml"

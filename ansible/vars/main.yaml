@@ -4,13 +4,6 @@ aws_region: us-west-2
 registry: quay.io
 user: rgopinat
 
-# certificate related data
-base_domain: fdo.sandbox1297.opentlc.com
-manufacturing: "manufacturing.{{ base_domain }}"
-rendezvous: "rendezvous.{{ base_domain }}"
-owner: "owner.{{ base_domain }}"
-email: ram.gopinathan@redhat.com
-
 # Instance related data
 ami: ami-084244df9265435b3
 instance_name: fdo-server
@@ -19,3 +12,10 @@ key_name: ec2
 subnet_id: subnet-0b07b6a81b12d29f9
 security_group_id: sg-0fbc003f8520f4e64
 storage: 50
+
+# fdo manufacturing config
+manufacturing_key: /etc/fdo/keys/anufacturer_key.pem
+owner_ca_cert: /etc/fdo/keys/owner_cert.pem
+device_ca_key: /etc/fdo/keys/device_ca_key.pem
+device_ca_cert: /etc/fdo/keys/device_ca_cert.pem
+db: /etc/fdo/fdo-manufacturing/mfg.db

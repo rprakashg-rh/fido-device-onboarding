@@ -6,8 +6,8 @@ PartOf=fdo.target
 Image=registry.access.redhat.com/ubi9/ubi-minimal
 ContainerName=fdo-manufacturing-init
 Exec=/bin/sh /scripts/init-fdo-manufacturing.sh
-Volume=/etc/fdo:/etc/fdo:Z
-Volume=/usr/bin:/scripts:Z
+Volume=/etc/fdo:/etc/fdo:ro,Z
+Volume=/usr/bin:/scripts:ro,Z
 
 [Service]
 Type=oneshot

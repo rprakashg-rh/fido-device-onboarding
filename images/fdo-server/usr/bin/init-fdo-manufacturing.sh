@@ -15,7 +15,7 @@ echo "Initializing FDO Manufacturing Server"
 CONFIG_SOURCE_DIR="/etc/fdo/fdo-manufacturing"
 
 # Manufacturing server config file
-CONFIG_FILE="fdo-manufacturing-config.yaml"
+CONFIG_FILE="$CONFIG_SOURCE_DIR/fdo-manufacturing-config.yaml"
 
 # Check if fdo-manufacturing-config file exists
 if [ ! -f "$CONFIG_FILE" ]; then

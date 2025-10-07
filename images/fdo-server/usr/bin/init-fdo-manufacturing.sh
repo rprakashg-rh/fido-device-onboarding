@@ -19,7 +19,7 @@ CONFIG_FILE="$CONFIG_SOURCE_DIR/fdo-manufacturing-config.yaml"
 
 # Check if fdo-manufacturing-config file exists
 if [ ! -f "$CONFIG_FILE" ]; then
-  echo "Error: FDO manufacturing server config file not found at $CONFIG_SOURC_DIR/$CONFIG_FILE"
+  echo "Error: FDO manufacturing server config file not found at $CONFIG_FILE"
   exit 1
 fi
 
@@ -54,7 +54,7 @@ if [ -z "$MANUFACTURING_KEY" ]; then
 fi
 
 # Get Owner cert path from config file
-OWNER_CA_CERT=$(get_keyvalue "owner_ca_cert", "$CONFIG_FILE")
+OWNER_CA_CERT=$(get_keyvalue "owner_ca_cert" "$CONFIG_FILE")
 #Verify owner ca cert is specified in config 
 if [ -z "$OWNER_CA_CERT" ]; then
     echo "Error: Owner ca certificate is missing in config file"
@@ -65,7 +65,7 @@ fi
 DEVICE_CA_KEY=$(get_keyvalue "device_ca_key" "$CONFIG_FILE")
 DEVICE_CA_CERT=$(get_keyvalue "device_ca_cert" "$CONFIG_FILE")
 # verify device ca cert and key is specified in config file
-if [ -z "$DEVICE_CA_KEY" || -z "$DEVICE_CA_CERT" ]; then
+if [[ -z "$DEVICE_CA_KEY" || -z "$DEVICE_CA_CERT" ]]; then
     echo "Error: Device CA Cert and key are required"
     exit 1 
 fi
@@ -80,11 +80,11 @@ fi
 
 #create the env file using template
 sed "s|{{MANUFACTURING_HOST_IP}}|${MANUFACTURING_HOST_IP}|g" "$ENV_TEMPLATE" > "$ENV_OUTPUT"
-sed "s|{{MANUFACTURING_PORT}}|${MANUFACTURING_PORT}|g" "$ENV_TEMPLATE" > "$ENV_OUTPUT"
-sed "s|{{MANUFACTURING_KEY}}|${MANUFACTURING_KEY}|g" "$ENV_TEMPLATE" > "$ENV_OUTPUT"
-sed "s|{{OWNER_CA_CERT}}|${OWNER_CA_CERT}|g" "$ENV_TEMPLATE" > "$ENV_OUTPUT"
-sed "s|{{DEVICE_CA_KEY}}|${DEVICE_CA_KEY}|g" "$ENV_TEMPLATE" > "$ENV_OUTPUT"
-sed "s|{{DEVICE_CA_CERT}}|${DEVICE_CA_CERT}|g" "$ENV_TEMPLATE" > "$ENV_OUTPUT"
-sed "s|{{MANUFACTURING_DB}}|${MANUFACTURING_DB}|g" "$ENV_TEMPLATE" > "$ENV_OUTPUT"
+sed -i "s|{{MANUFACTURING_PORT}}|${MANUFACTURING_PORT}|g" "$ENV_OUTPUT"
+sed -i "s|{{MANUFACTURING_KEY}}|${MANUFACTURING_KEY}|g" "$ENV_OUTPUT"
+sed -i "s|{{OWNER_CA_CERT}}|${OWNER_CA_CERT}|g" "$ENV_OUTPUT"
+sed -i "s|{{DEVICE_CA_KEY}}|${DEVICE_CA_KEY}|g" "$ENV_OUTPUT"
+sed -i "s|{{DEVICE_CA_CERT}}|${DEVICE_CA_CERT}|g" "$ENV_OUTPUT"
+sed -i "s|{{MANUFACTURING_DB}}|${MANUFACTURING_DB}|g" "$ENV_OUTPUT"
 
 echo "Initialization of FDO Manufacturing server is complete"

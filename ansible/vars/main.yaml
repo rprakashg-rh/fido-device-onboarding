@@ -5,7 +5,7 @@ registry: quay.io
 user: rgopinat
 
 # Instance related data
-ami: ami-084244df9265435b3
+ami: ami-04339b52ee3f32153
 instance_name: fdo-server
 instance_type: t2.2xlarge
 key_name: ec2

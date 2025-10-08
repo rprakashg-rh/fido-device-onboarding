@@ -27,7 +27,7 @@ fi
 ENV_OUTPUT="/etc/fdo/fdo-manufacturing/env"
 
 # Environment template file to use
-ENV_TEMPLATE="/usr/bin/fdo-manufacturing-env.template"
+ENV_TEMPLATE="/etc/fdo/fdo-manufacturing.service.d/fdo-manufacturing-env.template"
 
 # Get value for HOST_IP from config file
 MANUFACTURING_HOST_IP=$(ip route get 1.1.1.1 | awk '{print $7; exit}')

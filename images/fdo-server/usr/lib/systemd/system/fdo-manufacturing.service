@@ -1,4 +1,4 @@
-# /etc/systemd/system/myapp-b.service
+# /usr/lib/systemd/system/fdo-manufacturing.service
 [Unit]
 Description=FDO Manufacturing Server
 After=fdo-manufacturing-init.service

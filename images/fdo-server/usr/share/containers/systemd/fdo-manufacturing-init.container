@@ -6,7 +6,7 @@ PartOf=fdo.target
 Image=registry.access.redhat.com/ubi9/ubi-minimal
 ContainerName=fdo-manufacturing-init
 Exec=/bin/sh /etc/fdo/fdo-manufacturing.service.d/init-fdo-manufacturing.sh
-Volume=/etc/fdo:/etc/fdo:ro,Z
+Volume=/etc/fdo:/etc/fdo:rw,Z
 EnvironmentFile=/usr/share/containers/systemd/env
 
 [Service]

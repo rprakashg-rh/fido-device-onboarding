@@ -51,6 +51,7 @@ RUN mkdir -p /go/bin \
 
 RUN echo $PATH
 
-COPY --from=builder /go/bin/go-fdo-server /go/bin
+COPY --from=builder /go/bin/go-fdo-server /go/bin/
+RUN chmod +x /go/bin/
 
 CMD [ "/sbin/init" ]

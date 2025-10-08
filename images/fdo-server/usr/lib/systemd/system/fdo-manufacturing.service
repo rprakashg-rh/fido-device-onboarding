@@ -9,6 +9,7 @@ ExecStart=/go/bin/go-fdo-server manufacturing $MANUFACTURING_HOST_IP:$MANUFACTUR
 Restart=always
 BindPaths=/etc/fdo:/etc/fdo:Z
 EnvironmentFile=/etc/fdo/fdo-manufacturing/env
+EnvironmentFile=/usr/lib/systemd/system/env
 
 [Install]
 WantedBy=fdo.target

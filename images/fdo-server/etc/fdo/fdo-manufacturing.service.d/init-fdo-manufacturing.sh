@@ -29,12 +29,6 @@ ENV_OUTPUT="/etc/fdo/fdo-manufacturing/env"
 # Environment template file to use
 ENV_TEMPLATE="/etc/fdo/fdo-manufacturing.service.d/fdo-manufacturing-env.template"
 
-# verify MANUFACTURING_HOST_IP is set in environment variable
-if [ -z "$MANUFACTURING_HOST_IP" ]; then
-    echo "Error: Could not automatically get manufacturing_host_ip "
-    exit 1
-fi
-
 # Get value for port from config file
 MANUFACTURING_PORT=$(get_keyvalue "manufacturing_port" "$CONFIG_FILE")
 #verify MANUFACTURING_PORT is specified in config

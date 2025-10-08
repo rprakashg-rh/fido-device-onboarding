@@ -29,9 +29,7 @@ ENV_OUTPUT="/etc/fdo/fdo-manufacturing/env"
 # Environment template file to use
 ENV_TEMPLATE="/etc/fdo/fdo-manufacturing.service.d/fdo-manufacturing-env.template"
 
-# Get value for HOST_IP from config file
-MANUFACTURING_HOST_IP=$(ip route get 1.1.1.1 | awk '{print $7; exit}')
-# verify MANUFACTURING_HOST_IP is specified in config
+# verify MANUFACTURING_HOST_IP is set in environment variable
 if [ -z "$MANUFACTURING_HOST_IP" ]; then
     echo "Error: Could not automatically get manufacturing_host_ip "
     exit 1

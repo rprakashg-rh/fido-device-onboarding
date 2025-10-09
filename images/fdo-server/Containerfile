@@ -49,9 +49,6 @@ RUN mkdir -p /etc/fdo \
 RUN mkdir -p /go/bin \
     export PATH=/go/bin:$PATH
 
-RUN echo $PATH
-
-COPY --from=builder /go/bin/go-fdo-server /etc/fdo/
-RUN chmod +x /etc/fdo/go-fdo-server
+COPY --from=builder /go/bin/go-fdo-server /usr/local/bin
 
 CMD [ "/sbin/init" ]
